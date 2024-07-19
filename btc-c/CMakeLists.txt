@@ -1,7 +1,13 @@
 cmake_minimum_required(VERSION 3.2)
 project(btc_c C)
+find_package(OpenSSL REQUIRED)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(btc main.c
-        common.h)
+add_executable(btc main.c)
+
+# openssl包含两个库
+# libcrypto: 加解密算法库
+# libssl：加密模块应用库，实现了ssl及tls
+target_link_libraries(btc crypto)
+

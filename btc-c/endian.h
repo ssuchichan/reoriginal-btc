@@ -1,13 +1,14 @@
 #ifndef ENDIAN_H
 #define ENDIAN_H
+
 #include <stdint.h>
-#include <string.h>
 
 typedef enum {
     ENDIAN_BIG,
     ENDIAN_LITTLE
 } endian_t;
 
+// 返回本地的字节序
 endian_t host_endian() {
     static const union {
         uint16_t i;
@@ -17,11 +18,13 @@ endian_t host_endian() {
     return test.c[0] == 0x12 ? ENDIAN_BIG : ENDIAN_LITTLE;
 }
 
+// 反转uint16字节序
 uint16_t swap16(uint16_t n) {
     return n >> 8 |
            (n & 0xff) << 8;
 }
 
+// 反转uint32字节序
 uint32_t swap32(uint32_t n) {
     return n >> 24 |
            (n & 0xff0000) >> 8 |
@@ -29,6 +32,7 @@ uint32_t swap32(uint32_t n) {
            (n & 0xff) << 24;
 }
 
+// 反转uint64字节序
 uint64_t swap64(uint64_t n) {
     return n >> 56 |
         (n & 0xff000000000000) >> 40 |
@@ -40,6 +44,7 @@ uint64_t swap64(uint64_t n) {
         (n & 0xff) << 56;
 }
 
+// 目标字节序和本机字节序不一致，就反转字节序
 uint16_t endian16(endian_t e, uint16_t n) {
     if (host_endian() == e) {
         return n;
@@ -61,6 +66,7 @@ uint64_t endian64(endian_t e, uint64_t n) {
     return swap64(n);
 }
 
+// 反转字节数组
 void reverse(uint8_t* dst, size_t len) {
     size_t i;
     const size_t stop = len >> 1;
